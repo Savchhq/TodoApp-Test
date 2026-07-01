@@ -1,0 +1,18 @@
+# .NET
+**/bin/
+**/obj/
+
+# Visual Studio / Rider
+.vs/
+.idea/
+
+# Angular
+todo-frontend/node_modules/
+todo-frontend/dist/
+
+# Environment
+.env
+appsettings.Development.json
+
+# Logs
+*.log

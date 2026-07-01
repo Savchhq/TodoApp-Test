@@ -1,0 +1,53 @@
+<div class="category-container">
+  <h2>Управління категоріями</h2>
+
+  <div class="add-category-section">
+    <input
+      type="text"
+      placeholder="Назва нової категорії"
+      [(ngModel)]="newCategoryName"
+      (keyup.enter)="addCategory()">
+    <button type="button" (click)="addCategory()">Створити</button>
+  </div>
+
+  <ul class="category-list">
+    <li *ngFor="let category of categories">
+
+  <ng-container *ngIf="editingCategoryId !== category.id; else editCategoryForm">
+
+    <span>{{ category.name }}</span>
+
+    <div class="category-actions">
+      <button class="edit-btn" (click)="startEditCategory(category)">
+        ✏️ Редагувати
+      </button>
+
+      <button (click)="deleteCategory(category.id)">
+        🗑 Видалити
+      </button>
+    </div>
+
+  </ng-container>
+
+  <ng-template #editCategoryForm>
+
+    <input
+      type="text"
+      [(ngModel)]="editingCategoryName"
+      (keyup.enter)="saveEditCategory(category)">
+
+    <div class="category-actions">
+      <button class="edit-btn" (click)="saveEditCategory(category)">
+        💾 Зберегти
+      </button>
+
+      <button class="secondary-btn" (click)="cancelEditCategory()">
+        ❌ Скасувати
+      </button>
+    </div>
+
+  </ng-template>
+
+</li>
+  </ul>
+</div>

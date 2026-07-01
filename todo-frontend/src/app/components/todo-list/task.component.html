@@ -1,0 +1,323 @@
+<div class="todo-page">
+
+  <div class="page-header">
+    <h1>📝 Мої завдання</h1>
+  </div>
+
+  <!-- ================= Фільтри ================= -->
+
+  <div class="card">
+
+    <div class="card-header">
+      <h3>🔍 Пошук</h3>
+    </div>
+
+    <div class="filters-section">
+
+      <input
+        type="text"
+        placeholder="Пошук за назвою..."
+        [(ngModel)]="searchQuery"
+        (keyup.enter)="applyFilters()">
+
+      <select [(ngModel)]="filterCategoryId">
+        <option value="">Усі категорії</option>
+
+        <option
+          *ngFor="let category of categories"
+          [value]="category.id">
+          {{ category.name }}
+        </option>
+      </select>
+
+      <button
+        type="button"
+        class="primary-btn"
+        (click)="applyFilters()">
+        🔎 Знайти
+      </button>
+
+      <button
+        type="button"
+        class="secondary-btn"
+        (click)="clearFilters()">
+        ♻️ Скинути
+      </button>
+
+    </div>
+
+  </div>
+
+  <!-- ================= Створення ================= -->
+
+  <div class="card">
+
+    <div class="card-header">
+      <h3>➕ Нове завдання</h3>
+    </div>
+
+    <div class="add-task-section">
+
+      <input
+        type="text"
+        placeholder="Назва завдання"
+        [(ngModel)]="newTaskTitle"
+        (keyup.enter)="addTask()">
+
+      <textarea
+        rows="3"
+        placeholder="Опис (необов'язково)"
+        [(ngModel)]="newTaskDescription">
+      </textarea>
+
+      <div class="task-bottom">
+
+        <select [(ngModel)]="selectedCategoryId">
+
+          <option
+            value=""
+            disabled
+            *ngIf="categories.length === 0">
+            Немає категорій
+          </option>
+
+          <option
+            *ngFor="let category of categories"
+            [value]="category.id">
+            {{ category.name }}
+          </option>
+
+        </select>
+
+        <a
+          routerLink="/categories"
+          class="category-link">
+          📂 Категорії
+        </a>
+
+        <button
+          class="primary-btn"
+          type="button"
+          (click)="addTask()"
+          [disabled]="!selectedCategoryId">
+
+          ➕ Додати
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- ================= Результати ================= -->
+
+  <div
+    class="results-info"
+    *ngIf="totalCount > 0">
+
+    Знайдено <strong>{{ totalCount }}</strong> завдань
+
+  </div>
+
+  <!-- ================= Завдання ================= -->
+
+  <div
+    class="tasks"
+    *ngIf="tasks.length > 0">
+
+    <div
+      class="task-card"
+      *ngFor="let task of tasks">
+
+      <ng-container
+        *ngIf="editingTaskId !== task.id; else editForm">
+
+        <div class="task-left">
+
+          <input
+            class="task-checkbox"
+            type="checkbox"
+            [checked]="task.isCompleted"
+            (change)="toggleTask(task)">
+
+          <div class="task-info">
+
+            <div class="task-header">
+
+              <h3
+                class="task-title"
+                [class.completed]="task.isCompleted">
+
+                {{ task.title }}
+
+              </h3>
+
+              <span
+                class="category-badge"
+                *ngIf="task.categoryName">
+
+                📂 {{ task.categoryName }}
+
+              </span>
+
+            </div>
+
+            <p
+              *ngIf="task.description"
+              class="task-description">
+
+              {{ task.description }}
+
+            </p>
+
+          </div>
+
+        </div>
+
+        <div class="task-actions">
+
+          <button
+            class="edit-btn"
+            type="button"
+            (click)="startEditTask(task)">
+
+            ✏️
+
+          </button>
+
+          <button
+            class="delete-btn"
+            type="button"
+            (click)="deleteTask(task.id)">
+
+            🗑️
+
+          </button>
+
+        </div>
+
+      </ng-container>
+
+      <!-- ================= Редагування ================= -->
+
+      <ng-template #editForm>
+
+        <div class="edit-task-form">
+
+          <input
+            type="text"
+            [(ngModel)]="editTitle">
+
+          <textarea
+            rows="3"
+            placeholder="Опис"
+            [(ngModel)]="editDescription">
+          </textarea>
+
+          <select [(ngModel)]="editCategoryId">
+
+            <option
+              *ngFor="let category of categories"
+              [value]="category.id">
+
+              {{ category.name }}
+
+            </option>
+
+          </select>
+
+          <label class="completed-label">
+
+            <input
+              type="checkbox"
+              [(ngModel)]="editIsCompleted">
+
+            Виконано
+
+          </label>
+
+          <div class="edit-actions">
+
+            <button
+              class="primary-btn"
+              type="button"
+              (click)="saveEditTask(task)">
+
+              💾 Зберегти
+
+            </button>
+
+            <button
+              class="secondary-btn"
+              type="button"
+              (click)="cancelEditTask()">
+
+              ❌ Скасувати
+
+            </button>
+
+          </div>
+
+        </div>
+
+      </ng-template>
+
+    </div>
+
+  </div>
+
+  <!-- ================= Пагінація ================= -->
+
+  <div
+    class="pagination"
+    *ngIf="totalPages > 1">
+
+    <button
+      class="secondary-btn"
+      type="button"
+      (click)="goToPage(pageNumber - 1)"
+      [disabled]="pageNumber === 1">
+
+      ← Назад
+
+    </button>
+
+    <span>
+
+      Сторінка {{ pageNumber }} з {{ totalPages }}
+
+    </span>
+
+    <button
+      class="secondary-btn"
+      type="button"
+      (click)="goToPage(pageNumber + 1)"
+      [disabled]="pageNumber === totalPages">
+
+      Далі →
+
+    </button>
+
+  </div>
+
+  <!-- ================= Порожній список ================= -->
+
+  <div
+    class="empty-state"
+    *ngIf="tasks.length === 0">
+
+    <div class="empty-icon">
+      📋
+    </div>
+
+    <h3>Завдань не знайдено</h3>
+
+    <p>
+      Спробуйте змінити фільтри або створіть нове завдання.
+    </p>
+
+  </div>
+
+</div>
