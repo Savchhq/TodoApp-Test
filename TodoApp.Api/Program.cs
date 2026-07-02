@@ -16,15 +16,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddHealthChecks();
 
 builder.Services.AddDbContext<TodoAppDbContext>(options => 
-    options.UseSqlServer(builder.Configuration.GetConnectionString("TodoAppConnectionString")));
-
-builder.Services.AddIdentityCore<AppUser>()
-    .AddRoles<IdentityRole<Guid>>() 
-    .AddTokenProvider<DataProtectorTokenProvider<AppUser>>("TodoApp")
-    .AddEntityFrameworkStores<TodoAppDbContext>()
-    .AddDefaultTokenProviders();
+    options.UseNpgsql(builder.Configuration.GetConnectionString("TodoAppConnectionString")));
 
 builder.Services.AddIdentity<AppUser, IdentityRole<Guid>>(options =>
 {
@@ -106,6 +101,15 @@ app.UseCors("AllowAngularApp");
 app.UseAuthentication(); 
 app.UseAuthorization();
 app.MapControllers();
+app.MapHealthChecks("/healthz");
+
+
+var port = Environment.GetEnvironmentVariable("PORT");
+
+if (!string.IsNullOrEmpty(port))
+{
+    app.Urls.Add($"http://0.0.0.0:{port}");
+}
 
 app.Run();
 
