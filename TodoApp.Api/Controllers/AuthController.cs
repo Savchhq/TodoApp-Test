@@ -22,7 +22,10 @@ namespace TodoApp.Api.Controllers
 
             if (result.Succeeded)
             {
-                return Ok("User was registered! Please login.");
+                return Ok(new
+                {
+                    message = "User was registered! Please login."
+                });
             }
             return BadRequest(result.Errors);
         }
