@@ -1,53 +1,126 @@
-<div class="category-container">
-  <h2>Управління категоріями</h2>
+<div class="container my-4">
 
-  <div class="add-category-section">
-    <input
-      type="text"
-      placeholder="Назва нової категорії"
-      [(ngModel)]="newCategoryName"
-      (keyup.enter)="addCategory()">
-    <button type="button" (click)="addCategory()">Створити</button>
+  <div class="mb-5">
+    <h2 class="display-5">📂 Управління категоріями</h2>
   </div>
 
-  <ul class="category-list">
-    <li *ngFor="let category of categories">
+  <!-- ================= Додавання ================= -->
 
-  <ng-container *ngIf="editingCategoryId !== category.id; else editCategoryForm">
+  <div class="card mb-4">
 
-    <span>{{ category.name }}</span>
-
-    <div class="category-actions">
-      <button class="edit-btn" (click)="startEditCategory(category)">
-        ✏️ Редагувати
-      </button>
-
-      <button (click)="deleteCategory(category.id)">
-        🗑 Видалити
-      </button>
+    <div class="card-header bg-light">
+      <h5 class="mb-0">➕ Нова категорія</h5>
     </div>
 
-  </ng-container>
+    <div class="card-body">
 
-  <ng-template #editCategoryForm>
+      <div class="input-group">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Назва нової категорії"
+          [(ngModel)]="newCategoryName"
+          (keyup.enter)="addCategory()">
+        <button 
+          class="btn btn-primary" 
+          type="button" 
+          (click)="addCategory()">
+          ➕ Створити
+        </button>
+      </div>
 
-    <input
-      type="text"
-      [(ngModel)]="editingCategoryName"
-      (keyup.enter)="saveEditCategory(category)">
-
-    <div class="category-actions">
-      <button class="edit-btn" (click)="saveEditCategory(category)">
-        💾 Зберегти
-      </button>
-
-      <button class="secondary-btn" (click)="cancelEditCategory()">
-        ❌ Скасувати
-      </button>
     </div>
 
-  </ng-template>
+  </div>
 
-</li>
-  </ul>
+  <!-- ================= Список категорій ================= -->
+
+  <div class="list-group">
+
+    <div 
+      class="list-group-item"
+      *ngFor="let category of categories">
+
+      <ng-container *ngIf="editingCategoryId !== category.id; else editCategoryForm">
+
+        <div class="d-flex justify-content-between align-items-center">
+
+          <div>
+            <h5 class="mb-0">{{ category.name }}</h5>
+          </div>
+
+          <div class="btn-group" role="group">
+
+            <button 
+              class="btn btn-sm btn-outline-primary"
+              type="button"
+              (click)="startEditCategory(category)"
+              title="Редагувати">
+              ✏️ Редагувати
+            </button>
+
+            <button 
+              class="btn btn-sm btn-outline-danger"
+              type="button"
+              (click)="deleteCategory(category.id)"
+              title="Видалити">
+              🗑️ Видалити
+            </button>
+
+          </div>
+
+        </div>
+
+      </ng-container>
+
+      <ng-template #editCategoryForm>
+
+        <div class="d-flex gap-2">
+
+          <input
+            type="text"
+            class="form-control"
+            [(ngModel)]="editingCategoryName"
+            (keyup.enter)="saveEditCategory(category)">
+
+          <button 
+            class="btn btn-success"
+            type="button"
+            (click)="saveEditCategory(category)">
+            💾 Зберегти
+          </button>
+
+          <button 
+            class="btn btn-secondary"
+            type="button"
+            (click)="cancelEditCategory()">
+            ❌ Скасувати
+          </button>
+
+        </div>
+
+      </ng-template>
+
+    </div>
+
+  </div>
+
+  <!-- ================= Порожний список ================= -->
+
+  <div
+    class="text-center py-5"
+    *ngIf="categories.length === 0">
+
+    <div class="fs-1 mb-3">
+      📂
+    </div>
+
+    <h4>Категорій не знайдено</h4>
+
+    <p class="text-muted">
+      Створіть першу категорію, щоб почати організовувати завдання.
+    </p>
+
+  </div>
+
 </div>

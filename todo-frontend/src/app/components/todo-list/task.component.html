@@ -1,48 +1,59 @@
-<div class="todo-page">
+<div class="container my-4">
 
-  <div class="page-header">
-    <h1>📝 Мої завдання</h1>
+  <div class="mb-5">
+    <h1 class="display-4 mb-4">📝 Мої завдання</h1>
   </div>
 
   <!-- ================= Фільтри ================= -->
 
-  <div class="card">
+  <div class="card mb-4">
 
-    <div class="card-header">
-      <h3>🔍 Пошук</h3>
+    <div class="card-header bg-light">
+      <h5 class="mb-0">🔍 Пошук</h5>
     </div>
 
-    <div class="filters-section">
+    <div class="card-body">
 
-      <input
-        type="text"
-        placeholder="Пошук за назвою..."
-        [(ngModel)]="searchQuery"
-        (keyup.enter)="applyFilters()">
+      <div class="row g-3">
 
-      <select [(ngModel)]="filterCategoryId">
-        <option value="">Усі категорії</option>
+        <div class="col-md-6">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Пошук за назвою..."
+            [(ngModel)]="searchQuery"
+            (keyup.enter)="applyFilters()">
+        </div>
 
-        <option
-          *ngFor="let category of categories"
-          [value]="category.id">
-          {{ category.name }}
-        </option>
-      </select>
+        <div class="col-md-6">
+          <select class="form-select" [(ngModel)]="filterCategoryId">
+            <option value="">Усі категорії</option>
 
-      <button
-        type="button"
-        class="primary-btn"
-        (click)="applyFilters()">
-        🔎 Знайти
-      </button>
+            <option
+              *ngFor="let category of categories"
+              [value]="category.id">
+              {{ category.name }}
+            </option>
+          </select>
+        </div>
 
-      <button
-        type="button"
-        class="secondary-btn"
-        (click)="clearFilters()">
-        ♻️ Скинути
-      </button>
+        <div class="col-12">
+          <button
+            type="button"
+            class="btn btn-primary me-2"
+            (click)="applyFilters()">
+            🔎 Знайти
+          </button>
+
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="clearFilters()">
+            ♻️ Скинути
+          </button>
+        </div>
+
+      </div>
 
     </div>
 
@@ -50,60 +61,70 @@
 
   <!-- ================= Створення ================= -->
 
-  <div class="card">
+  <div class="card mb-4">
 
-    <div class="card-header">
-      <h3>➕ Нове завдання</h3>
+    <div class="card-header bg-light">
+      <h5 class="mb-0">➕ Нове завдання</h5>
     </div>
 
-    <div class="add-task-section">
+    <div class="card-body">
 
-      <input
-        type="text"
-        placeholder="Назва завдання"
-        [(ngModel)]="newTaskTitle"
-        (keyup.enter)="addTask()">
+      <div class="mb-3">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Назва завдання"
+          [(ngModel)]="newTaskTitle"
+          (keyup.enter)="addTask()">
+      </div>
 
-      <textarea
-        rows="3"
-        placeholder="Опис (необов'язково)"
-        [(ngModel)]="newTaskDescription">
-      </textarea>
+      <div class="mb-3">
+        <textarea
+          class="form-control"
+          rows="3"
+          placeholder="Опис (необов'язково)"
+          [(ngModel)]="newTaskDescription">
+        </textarea>
+      </div>
 
-      <div class="task-bottom">
+      <div class="row g-2">
 
-        <select [(ngModel)]="selectedCategoryId">
+        <div class="col-md-6">
+          <select class="form-select" [(ngModel)]="selectedCategoryId">
 
-          <option
-            value=""
-            disabled
-            *ngIf="categories.length === 0">
-            Немає категорій
-          </option>
+            <option
+              value=""
+              disabled
+              *ngIf="categories.length === 0">
+              Немає категорій
+            </option>
 
-          <option
-            *ngFor="let category of categories"
-            [value]="category.id">
-            {{ category.name }}
-          </option>
+            <option
+              *ngFor="let category of categories"
+              [value]="category.id">
+              {{ category.name }}
+            </option>
 
-        </select>
+          </select>
+        </div>
 
-        <a
-          routerLink="/categories"
-          class="category-link">
-          📂 Категорії
-        </a>
+        <div class="col-md-6 d-flex gap-2">
 
-        <button
-          class="primary-btn"
-          type="button"
-          (click)="addTask()"
-          [disabled]="!selectedCategoryId">
+          <a
+            routerLink="/categories"
+            class="btn btn-outline-secondary flex-grow-1">
+            📂 Категорії
+          </a>
 
-          ➕ Додати
+          <button
+            class="btn btn-success flex-grow-1"
+            type="button"
+            (click)="addTask()"
+            [disabled]="!selectedCategoryId">
+            ➕ Додати
+          </button>
 
-        </button>
+        </div>
 
       </div>
 
@@ -114,87 +135,87 @@
   <!-- ================= Результати ================= -->
 
   <div
-    class="results-info"
-    *ngIf="totalCount > 0">
-
+    class="alert alert-info mb-4"
+    *ngIf="totalCount > 0"
+    role="alert">
     Знайдено <strong>{{ totalCount }}</strong> завдань
-
   </div>
 
   <!-- ================= Завдання ================= -->
 
   <div
-    class="tasks"
+    class="mb-4"
     *ngIf="tasks.length > 0">
 
     <div
-      class="task-card"
+      class="card task-item mb-3"
       *ngFor="let task of tasks">
 
       <ng-container
         *ngIf="editingTaskId !== task.id; else editForm">
 
-        <div class="task-left">
+        <div class="card-body">
 
-          <input
-            class="task-checkbox"
-            type="checkbox"
-            [checked]="task.isCompleted"
-            (change)="toggleTask(task)">
+          <div class="d-flex gap-3">
 
-          <div class="task-info">
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                [checked]="task.isCompleted"
+                (change)="toggleTask(task)"
+                [id]="'checkbox-' + task.id">
+              <label class="form-check-label" [for]="'checkbox-' + task.id"></label>
+            </div>
 
-            <div class="task-header">
+            <div class="flex-grow-1">
 
-              <h3
-                class="task-title"
-                [class.completed]="task.isCompleted">
+              <div class="d-flex gap-2 align-items-center mb-2">
 
-                {{ task.title }}
+                <h5
+                  class="mb-0"
+                  [class.text-decoration-line-through]="task.isCompleted"
+                  [class.text-muted]="task.isCompleted">
+                  {{ task.title }}
+                </h5>
 
-              </h3>
+                <span
+                  class="badge bg-info"
+                  *ngIf="task.categoryName">
+                  📂 {{ task.categoryName }}
+                </span>
 
-              <span
-                class="category-badge"
-                *ngIf="task.categoryName">
+              </div>
 
-                📂 {{ task.categoryName }}
-
-              </span>
+              <p
+                *ngIf="task.description"
+                class="mb-0 text-muted">
+                {{ task.description }}
+              </p>
 
             </div>
 
-            <p
-              *ngIf="task.description"
-              class="task-description">
+            <div class="d-flex gap-2">
 
-              {{ task.description }}
+              <button
+                class="btn btn-sm btn-outline-primary"
+                type="button"
+                (click)="startEditTask(task)"
+                title="Редагувати">
+                ✏️
+              </button>
 
-            </p>
+              <button
+                class="btn btn-sm btn-outline-danger"
+                type="button"
+                (click)="deleteTask(task.id)"
+                title="Видалити">
+                🗑️
+              </button>
+
+            </div>
 
           </div>
-
-        </div>
-
-        <div class="task-actions">
-
-          <button
-            class="edit-btn"
-            type="button"
-            (click)="startEditTask(task)">
-
-            ✏️
-
-          </button>
-
-          <button
-            class="delete-btn"
-            type="button"
-            (click)="deleteTask(task.id)">
-
-            🗑️
-
-          </button>
 
         </div>
 
@@ -204,58 +225,64 @@
 
       <ng-template #editForm>
 
-        <div class="edit-task-form">
+        <div class="card-body">
 
-          <input
-            type="text"
-            [(ngModel)]="editTitle">
-
-          <textarea
-            rows="3"
-            placeholder="Опис"
-            [(ngModel)]="editDescription">
-          </textarea>
-
-          <select [(ngModel)]="editCategoryId">
-
-            <option
-              *ngFor="let category of categories"
-              [value]="category.id">
-
-              {{ category.name }}
-
-            </option>
-
-          </select>
-
-          <label class="completed-label">
-
+          <div class="mb-3">
+            <label class="form-label">Назва</label>
             <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="editTitle">
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Опис</label>
+            <textarea
+              class="form-control"
+              rows="3"
+              placeholder="Опис"
+              [(ngModel)]="editDescription">
+            </textarea>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Категорія</label>
+            <select class="form-select" [(ngModel)]="editCategoryId">
+
+              <option
+                *ngFor="let category of categories"
+                [value]="category.id">
+                {{ category.name }}
+              </option>
+
+            </select>
+          </div>
+
+          <div class="form-check mb-3">
+            <input
+              class="form-check-input"
               type="checkbox"
-              [(ngModel)]="editIsCompleted">
+              [(ngModel)]="editIsCompleted"
+              id="editCompleted">
+            <label class="form-check-label" for="editCompleted">
+              Виконано
+            </label>
+          </div>
 
-            Виконано
-
-          </label>
-
-          <div class="edit-actions">
+          <div class="d-flex gap-2">
 
             <button
-              class="primary-btn"
+              class="btn btn-success"
               type="button"
               (click)="saveEditTask(task)">
-
               💾 Зберегти
-
             </button>
 
             <button
-              class="secondary-btn"
+              class="btn btn-secondary"
               type="button"
               (click)="cancelEditTask()">
-
               ❌ Скасувати
-
             </button>
 
           </div>
@@ -270,51 +297,55 @@
 
   <!-- ================= Пагінація ================= -->
 
-  <div
-    class="pagination"
-    *ngIf="totalPages > 1">
+  <nav
+    *ngIf="totalPages > 1"
+    aria-label="Page navigation">
 
-    <button
-      class="secondary-btn"
-      type="button"
-      (click)="goToPage(pageNumber - 1)"
-      [disabled]="pageNumber === 1">
+    <ul class="pagination justify-content-center mb-4">
 
-      ← Назад
+      <li class="page-item" [class.disabled]="pageNumber === 1">
+        <button
+          class="page-link"
+          type="button"
+          (click)="goToPage(pageNumber - 1)"
+          [disabled]="pageNumber === 1">
+          ← Назад
+        </button>
+      </li>
 
-    </button>
+      <li class="page-item active">
+        <span class="page-link">
+          Сторінка {{ pageNumber }} з {{ totalPages }}
+        </span>
+      </li>
 
-    <span>
+      <li class="page-item" [class.disabled]="pageNumber === totalPages">
+        <button
+          class="page-link"
+          type="button"
+          (click)="goToPage(pageNumber + 1)"
+          [disabled]="pageNumber === totalPages">
+          Далі →
+        </button>
+      </li>
 
-      Сторінка {{ pageNumber }} з {{ totalPages }}
+    </ul>
 
-    </span>
-
-    <button
-      class="secondary-btn"
-      type="button"
-      (click)="goToPage(pageNumber + 1)"
-      [disabled]="pageNumber === totalPages">
-
-      Далі →
-
-    </button>
-
-  </div>
+  </nav>
 
   <!-- ================= Порожній список ================= -->
 
   <div
-    class="empty-state"
+    class="text-center py-5"
     *ngIf="tasks.length === 0">
 
-    <div class="empty-icon">
+    <div class="fs-1 mb-3">
       📋
     </div>
 
     <h3>Завдань не знайдено</h3>
 
-    <p>
+    <p class="text-muted">
       Спробуйте змінити фільтри або створіть нове завдання.
     </p>
 

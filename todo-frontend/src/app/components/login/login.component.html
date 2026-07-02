@@ -1,42 +1,52 @@
-<div class="login-page">
-  <div class="login-card">
+<div class="container d-flex align-items-center justify-content-center min-vh-100">
+  <div class="card shadow-lg" style="width: 100%; max-width: 400px;">
 
-    <h2>Ласкаво просимо 👋</h2>
-    <p class="subtitle">Увійдіть у свій акаунт</p>
+    <div class="card-body p-5">
 
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <h2 class="card-title text-center mb-2">Ласкаво просимо 👋</h2>
+      <p class="text-center text-muted mb-4">Увійдіть у свій акаунт</p>
 
-      <div class="form-group">
-        <label for="email">Email</label>
-        <input
-          type="email"
-          id="email"
-          formControlName="email"
-          placeholder="example@gmail.com">
-      </div>
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
 
-      <div class="form-group">
-        <label for="password">Пароль</label>
-        <input
-          type="password"
-          id="password"
-          formControlName="password"
-          placeholder="Мінімум 6 символів">
-      </div>
+        <div class="mb-3">
+          <label for="email" class="form-label">Email</label>
+          <input
+            type="email"
+            class="form-control"
+            id="email"
+            formControlName="email"
+            placeholder="example@gmail.com"
+            required>
+        </div>
 
-      <button
-        type="submit"
-        class="login-btn"
-        [disabled]="loginForm.invalid">
-        Увійти
-      </button>
+        <div class="mb-4">
+          <label for="password" class="form-label">Пароль</label>
+          <input
+            type="password"
+            class="form-control"
+            id="password"
+            formControlName="password"
+            placeholder="Мінімум 6 символів"
+            required>
+        </div>
 
-    </form>
+        <button
+          type="submit"
+          class="btn btn-primary w-100 mb-3"
+          [disabled]="loginForm.invalid">
+          Увійти
+        </button>
 
-    <p class="register-link">
-      Ще не маєте акаунта?
-      <a routerLink="/register">Зареєструватися</a>
-    </p>
+      </form>
+
+      <hr>
+
+      <p class="text-center mb-0">
+        Ще не маєте акаунта?
+        <a routerLink="/register" class="text-decoration-none">Зареєструватися</a>
+      </p>
+
+    </div>
 
   </div>
 </div>
