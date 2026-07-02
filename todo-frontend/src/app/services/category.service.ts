@@ -3,12 +3,13 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 // Імпортуємо обидві твої моделі
 import { CategoryDto, CreateUpdateCategoryDto } from '../models/category.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CategoryService {
-  private apiUrl = 'http://localhost:5188/api/category'; 
+  private apiUrl = `${environment.apiUrl}/Task`;
 
   constructor(private http: HttpClient) { }
 
